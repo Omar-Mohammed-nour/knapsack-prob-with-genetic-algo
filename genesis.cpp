@@ -20,7 +20,7 @@ using namespace std;
 //generate random float number between 0 and 1
 float random_float() {
     srand(time(NULL));
-    return static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
+    return static_cast<double>(rand()) / static_cast<double>(RAND_MAX);
 }
 
 //how or what to add to our vector
@@ -66,17 +66,8 @@ int main() {
 	}
 
     int generations = 3, gene = 0;
-while (gene < generations) {
-    
-    
-    for (int i = 0; i <= 3; i++) {
-        for (int k = 0; k <= 3; k++) {
-            cout << binariesP[i][k] << ", ";
-        }
-        newline;
-    }
-    
 
+while (gene < generations) {
     cout << "Generation :" << gene;
     newline;
 
@@ -122,7 +113,7 @@ while (gene < generations) {
     
     int x, y;
 
-    for (int z = 0; z <= 1; z++) {//this runs for 4 times 
+    for (int z = 0; z <= 2; z++) {//this runs for 4 times 
         x = rand() % randro, y = rand() % randro;
         if (x == y) {
             if (x == 3 & y == 3) {
@@ -148,63 +139,106 @@ while (gene < generations) {
                 children[z][i] = binariesP[y][i];
             }
         }
-    cout << ParentValu[x].parentNumber + 1 << space << ParentValu[y].parentNumber + 1 << space << ParentValu[x].uniValue << space << ParentValu[y].uniValue;
+    cout << "parent X :" << ParentValu[x].parentNumber << space << "parent Y :" << ParentValu[y].parentNumber << space << "X Val :" << ParentValu[x].uniValue << space << "Y Val :" << ParentValu[y].uniValue << space << "X weight :" << ParentValu[x].uniWeight << space << "Y weight :" << ParentValu[y].uniWeight;
     newline;
     }
     
-    for (int i = 0; i <= 1; i++) {
+    for (int i = 0; i <= 3; i++) {
         for (int k = 0; k <= 3; k++) {
-            cout << children[i][k] << ", ";
+            cout << binariesP[i][k] << ", ";
         }
         newline;
     }
+        
+    memcpy(binariesP, children, sizeof(children));
 
+    //all the side tasks and cross over, mutation
+    bool isCrossed = false;
     float xR = random_float();
     const float crossover_rate = 0.5;//this should be 0.5 but its whatever it is for testing 
 
     if (x <= crossover_rate) {//this shoulf be x < crossover_rate but it is whatever it is for testing
-        children[0][2] = children[1][0];
-        children[1][1] = children[0][3];
-    
+        isCrossed = true;
+        
+        binariesP[0][1] = binariesP[1][0];
+        binariesP[0][0] = binariesP[1][1];
 
+        binariesP[1][1] = binariesP[0][2];
+        binariesP[1][0] = binariesP[0][3];
+
+    
+        binariesP[2][1] = binariesP[3][0];
+        binariesP[2][0] = binariesP[3][1];
+
+        binariesP[3][1] = binariesP[2][2];
+        binariesP[3][0] = binariesP[2][3];
+
+        cout  << "after crossover";
+        
         newline;
-        for (int i = 0; i <= 1; i++) {
+        for (int i = 0; i <= 3; i++) {
             for (int k = 0; k <= 3; k++) {
-                cout << children[i][k] << ", ";
+                cout << binariesP[i][k] << ", ";
             }
             newline;
         }
     }
-    
-    const float mutation_rate = 0.2;//this should be 0.2 but it is whatever it is for testing
+        
 
-    for (int i = 0;  i <= 1; i++) {
+if (isCrossed) {
+    const float mutation_rate = 0.1;//this should be 0.2 but it is whatever it is for testing
+    
+    for (int i = 0;  i <= 2; i++) {
         for (int k = 0; k <= 3; k++) {
             float xre = random_float();
             if (xre <= mutation_rate) {//this should be xre < mutation_rate but it is whatever it is for testing
-                if (children[i][k] == 0) {
-                    children[i][k] = 1;
+                if (binariesP[i][k] == 0) {
+                    binariesP[i][k] = 1;
                 }
-                else if (children[i][k] == 1) {
-                    children[i][k] = 0;
+                else if (binariesP[i][k] == 1) {
+                    binariesP[i][k] = 0;
                 }
                 cout << "We Mutated!!!";
             }
         }
     }
+}
+
 
     newline;
     
-    for (int i = 0; i <= 1; i++) {
-        for (int k = 0; k <= 3; k++) {
-            cout << children[i][k] << ", ";
-        }
-        newline;
-    }
-   
     //copy all items back to parents to do the genereations loop
-    memcpy(binariesP, children, sizeof(children));
+    //memcpy(binariesP, children, sizeof(children));
+    //     ^^ destination
+    //                ^^ source
+    //                          ^^ size of source
+    
 
+    newline;newline;
+
+
+    
+        for (int i = 0; i <= 3; i++) {
+            for (int k = 0; k <= 3; k++) {
+                cout << children[i][k] << ", ";
+            }
+            newline;
+        }
+    
+        cout << "^^source array^^:";
+        newline;
+
+
+        for (int i = 0; i <= 3; i++) {
+            for (int k = 0; k <= 3; k++) {
+                cout << binariesP[i][k] << ", ";
+            }
+            newline;
+        }
+
+        cout << "^^destination array^^";
+
+             
     newline;
     newline;
     gene++;
