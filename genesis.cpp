@@ -238,7 +238,21 @@ if (isCrossed) {
 
         cout << "^^destination array^^";
 
-             
+    
+        int checker = 0;
+        for (int i = 0; i <= 3; i++) {
+            for (int k = 0; k <= 3; k++) {
+                checker += binariesP[i][k];
+            }
+        }
+
+        if (checker == 0) {
+            newline;
+            cout << "this generation is 'infertile' no more generations possible";
+            break;
+        }
+
+
     newline;
     newline;
     gene++;
